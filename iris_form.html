@@ -1,0 +1,149 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Iris - Yeni Gözlem</title>
+    <style>
+        /* Modern Hover & Input Styling */
+        .btn-save {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .btn-save:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        /* Glassmorphism Inputs - Adjusted for visibility against a clear background */
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.4);
+            background: rgba(0, 0, 0, 0.2); /* Slightly darker input for contrast */
+            color: white;
+            box-sizing: border-box;
+            outline: none;
+        }
+        input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        select option {
+            background: #2c3e50;
+            color: white;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 14px;
+            color: white;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+
+<body style="
+    margin:0; 
+    font-family: 'Segoe UI', sans-serif; 
+    overflow-x:hidden;
+    background-image: url('{% static "images/iris.jpg" %}');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+">
+
+    <div style="
+        position:fixed; 
+        top:0; left:0; 
+        width:100%; height:100%; 
+        background:rgba(0,0,0,0.2); 
+        z-index:-1;
+    "></div>
+
+    <nav style="background:rgba(44, 62, 80, 0.9); padding:15px; display:flex; justify-content:space-around; align-items:center; backdrop-filter: blur(5px);">
+        <a href="{% url 'home' %}" style="color:white; text-decoration:none; font-weight:bold;">🏠 Ana Sayfa</a>
+        <a href="{% url 'iris_list' %}" style="color:white; text-decoration:none; font-weight:bold;">📊 Veri Listesi</a>
+        <a href="{% url 'predict' %}" style="color:white; text-decoration:none; font-weight:bold;">🤖 ML Tahmin</a>
+        <form method="post" action="{% url 'logout' %}" style="margin:0;">
+            {% csrf_token %}
+            <button type="submit" style="background:none; border:none; color:#ff7675; font-weight:bold; cursor:pointer; font-size:16px;">Çıkış Yap</button>
+        </form>
+    </nav>
+
+    <div style="min-height:calc(100vh - 70px); display:flex; align-items:center; justify-content:center; padding: 40px 20px;">
+        
+        <div style="
+            width:100%;
+            max-width:480px;
+            background: rgba(255, 255, 255, 0.15); 
+            backdrop-filter: blur(20px);        /* Stronger blur for better contrast */
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            color: white;
+        ">
+            <h2 style="text-align:center; margin-bottom:30px; font-size: 26px; text-shadow: 2px 2px 8px rgba(0,0,0,0.3);">
+                🌸 Yeni Iris Gözlemi Ekle
+            </h2>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <label>Bahçe Seçin</label>
+                <select name="garden" required>
+                    {% for garden in gardens %}
+                        <option value="{{ garden.id }}">{{ garden.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <div style="display: flex; gap: 15px;">
+                    <div style="flex: 1;">
+                        <label>Sepal Length</label>
+                        <input type="number" step="0.1" name="sepal_length" placeholder="5.1" required>
+                    </div>
+                    <div style="flex: 1;">
+                        <label>Sepal Width</label>
+                        <input type="number" step="0.1" name="sepal_width" placeholder="3.5" required>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 15px;">
+                    <div style="flex: 1;">
+                        <label>Petal Length</label>
+                        <input type="number" step="0.1" name="petal_length" placeholder="1.4" required>
+                    </div>
+                    <div style="flex: 1;">
+                        <label>Petal Width</label>
+                        <input type="number" step="0.1" name="petal_width" placeholder="0.2" required>
+                    </div>
+                </div>
+
+                <label>Tür Bilgisi</label>
+                <input type="text" name="species" placeholder="Örn: Iris-setosa" required>
+
+                <button type="submit" class="btn-save" style="
+                    width:100%;
+                    padding:16px;
+                    background:#27ae60;
+                    border:none;
+                    color:white;
+                    font-size:16px;
+                    border-radius:12px;
+                    cursor:pointer;
+                    font-weight:bold;
+                    margin-top: 15px;
+                ">
+                    💾 Gözlemi Kaydet
+                </button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

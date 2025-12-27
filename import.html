@@ -1,0 +1,119 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>CSV Veri Yükle</title>
+</head>
+
+<body style="
+    margin:0;
+    min-height:100vh;
+    font-family:Arial, sans-serif;
+    background-image: url('{% static "images/iris.jpg" %}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+">
+
+    <!-- NAVBAR -->
+    <nav style="
+        background:#2c3e50;
+        padding:15px;
+        display:flex;
+        justify-content:space-around;
+        align-items:center;
+    ">
+        <a href="{% url 'home' %}" style="color:white; text-decoration:none; font-weight:bold;">
+            🏠 Ana Sayfa
+        </a>
+
+        <a href="{% url 'iris_list' %}" style="color:white; text-decoration:none; font-weight:bold;">
+            📊 Veri Listesi
+        </a>
+
+        <a href="{% url 'predict' %}" style="color:white; text-decoration:none; font-weight:bold;">
+            🤖 ML Tahmin
+        </a>
+
+        <form method="post" action="{% url 'logout' %}" style="margin:0;">
+            {% csrf_token %}
+            <button type="submit" style="
+                background:none;
+                border:none;
+                color:#ff7675;
+                font-weight:bold;
+                cursor:pointer;
+                font-size:16px;
+            ">
+                Çıkış Yap
+            </button>
+        </form>
+    </nav>
+
+    <!-- CARD -->
+    <div style="
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        padding-top:120px;
+    ">
+        <div style="
+            width:500px;
+            background:white;
+            padding:35px;
+            border-radius:10px;
+            box-shadow:0 8px 20px rgba(0,0,0,0.15);
+            text-align:center;
+        ">
+
+            <h2 style="margin-bottom:15px;">
+                📂 CSV Dosyasından Veri Yükle
+            </h2>
+
+            <p style="color:#555; font-size:14px; margin-bottom:25px;">
+                Lütfen uygun formatta bir <strong>.csv</strong> dosyası seçin.
+            </p>
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <input type="file" name="csv_file" accept=".csv" required style="
+                    width:100%;
+                    padding:10px;
+                    border:1px solid #ccc;
+                    border-radius:5px;
+                    margin-bottom:20px;
+                ">
+
+                <button type="submit" style="
+                    width:100%;
+                    padding:12px;
+                    background:#9b59b6;
+                    border:none;
+                    color:white;
+                    font-size:16px;
+                    border-radius:5px;
+                    cursor:pointer;
+                    font-weight:bold;
+                ">
+                    ⬆️ Verileri Yükle
+                </button>
+            </form>
+
+            <a href="{% url 'iris_list' %}" style="
+                display:block;
+                margin-top:20px;
+                text-decoration:none;
+                color:#2980b9;
+                font-weight:bold;
+            ">
+                ← Veri Tablosuna Geri Dön
+            </a>
+
+        </div>
+    </div>
+
+</body>
+</html>

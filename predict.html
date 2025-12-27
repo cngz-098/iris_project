@@ -1,0 +1,163 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Iris - ML Tahmin</title>
+    <style>
+        /* Modern Hover & Input Styling */
+        .btn-predict {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .btn-predict:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        /* Glassmorphism Inputs */
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(0, 0, 0, 0.2); 
+            color: white;
+            box-sizing: border-box;
+            outline: none;
+        }
+        input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        select option {
+            background: #2c3e50;
+            color: white;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 14px;
+            color: white;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+
+<body style="margin:0; font-family: 'Segoe UI', sans-serif; overflow-x:hidden;">
+
+    <video autoplay muted loop playsinline
+        style="position:fixed; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:-2;">
+        <source src="/static/videos/iris5.mp4" type="video/mp4">
+    </video>
+
+    <div style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.25); z-index:-1;"></div>
+
+    <nav style="background: rgba(44, 62, 80, 0.9); padding: 15px; display: flex; justify-content: space-around; backdrop-filter: blur(10px);">
+        <a href="{% url 'home' %}" style="color: white; text-decoration: none; font-weight: bold;">🏠 Ana Sayfa</a>
+        <a href="{% url 'iris_list' %}" style="color: white; text-decoration: none; font-weight: bold;">📊 Veri Listesi</a>
+        <a href="{% url 'predict' %}" style="color: white; text-decoration: none; font-weight: bold; border-bottom: 2px solid #3498db;">🤖 ML Tahmin</a>
+        <form method="post" action="{% url 'logout' %}" style="display:inline; margin:0;">
+            {% csrf_token %}
+            <button type="submit" style="background:none; border:none; color:#ff7675; font-weight:bold; cursor:pointer; font-size:16px;">Çıkış Yap</button>
+        </form>
+    </nav>
+
+    <div style="min-height:calc(100vh - 70px); display:flex; flex-direction: column; align-items:center; justify-content:center; padding: 40px 20px;">
+        
+        <div style="
+            width:100%;
+            max-width:500px;
+            background: rgba(255, 255, 255, 0.15); 
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            color: white;
+        ">
+            <h2 style="text-align:center; margin-bottom:30px; font-size: 26px; text-shadow: 2px 2px 8px rgba(0,0,0,0.3);">
+                🤖 Iris Türü Tahmin Et
+            </h2>
+
+            <form method="post">
+                {% csrf_token %}
+                
+                <div style="display: flex; gap: 15px;">
+                    <div style="flex: 1;">
+                        <label>Sepal Length</label>
+                        <input type="number" step="0.1" name="sepal_length" placeholder="5.1" required>
+                    </div>
+                    <div style="flex: 1;">
+                        <label>Sepal Width</label>
+                        <input type="number" step="0.1" name="sepal_width" placeholder="3.5" required>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 15px;">
+                    <div style="flex: 1;">
+                        <label>Petal Length</label>
+                        <input type="number" step="0.1" name="petal_length" placeholder="1.4" required>
+                    </div>
+                    <div style="flex: 1;">
+                        <label>Petal Width</label>
+                        <input type="number" step="0.1" name="petal_width" placeholder="0.2" required>
+                    </div>
+                </div>
+
+                <label>Algoritma Seçimi</label>
+                <select name="algorithm">
+                    <option value="KNN">K-Nearest Neighbors (KNN)</option>
+                    <option value="DecisionTree">Decision Tree</option>
+                    <option value="Logistic">Logistic Regression</option>
+                </select>
+
+                <button type="submit" class="btn-predict" style="
+                    width:100%;
+                    padding:16px;
+                    background:#27ae60;
+                    border:none;
+                    color:white;
+                    font-size:16px;
+                    border-radius:12px;
+                    cursor:pointer;
+                    font-weight:bold;
+                    margin-top: 10px;
+                ">
+                    Tahmin Et
+                </button>
+            </form>
+
+            {% if result %}
+                <div style="margin-top: 25px; padding: 20px; background: rgba(39, 174, 96, 0.3); border-radius: 12px; border-left: 5px solid #2ecc71;">
+                    <h3 style="margin: 0 0 10px 0; color: #2ecc71;">Tahmin Sonucu</h3>
+                    <p style="margin: 5px 0;"><strong>Tür:</strong> <span style="font-size: 18px;">{{ result }}</span></p>
+                    <p style="margin: 5px 0; font-size: 14px; opacity: 0.9;"><strong>Model Başarısı:</strong> %{{ accuracy|stringformat:".2f" }}</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div style="
+            width:100%;
+            max-width:500px;
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.3); 
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            color: #ecf0f1;
+            font-size: 14px;
+        ">
+            <h3 style="margin-top:0; color: #3498db;">💡 Bilgi</h3>
+            <ul style="padding-left: 20px; line-height: 1.6;">
+                <li>Veriler Scikit-learn kütüphanesi ile işlenmektedir.</li>
+                <li>Girdiğiniz ölçümler <b>cm</b> cinsinden olmalıdır.</li>
+            </ul>
+        </div>
+    </div>
+
+</body>
+</html>

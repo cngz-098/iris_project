@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Iris - Ana Sayfa</title>
+    <style>
+        /* Modern Hover Effects */
+        .btn-action {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .btn-action:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+        /* Navbar link hover */
+        .nav-link:hover {
+            text-decoration: underline !important;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body style="margin:0; font-family: 'Segoe UI', sans-serif; overflow:hidden;">
+
+    <video autoplay muted loop playsinline
+        style="position:fixed; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:-2;">
+        <source src="/static/videos/iris.mp4" type="video/mp4">
+    </video>
+
+    <div style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:-1;"></div>
+
+    <nav style="background:#2c3e50; padding:15px; display:flex; justify-content:space-around; align-items:center; box-shadow: 0 2px 10px rgba(0,0,0,0.5);">
+        <a href="{% url 'home' %}" class="nav-link" style="color:white; text-decoration:none; font-weight:bold;">🏠 Ana Sayfa</a>
+        <a href="{% url 'iris_list' %}" class="nav-link" style="color:white; text-decoration:none; font-weight:bold;">📊 Veri Listesi</a>
+        <a href="{% url 'predict' %}" class="nav-link" style="color:white; text-decoration:none; font-weight:bold;">🤖 ML Tahmin</a>
+        <form method="post" action="{% url 'logout' %}" style="margin:0;">
+            {% csrf_token %}
+            <button type="submit" style="background:none; border:none; color:#ff7675; font-weight:bold; cursor:pointer; font-size:16px;">
+                Çıkış Yap
+            </button>
+        </form>
+    </nav>
+
+    <div style="height:calc(100vh - 70px); padding: 60px 10%; display: flex; flex-direction: column; justify-content: center;">
+        
+        <h1 style="
+            font-size: 48px; 
+            margin: 0 0 20px 0; 
+            color: white; 
+            text-align: left; 
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        ">
+            🌸 Iris Yönetim Paneli
+        </h1>
+
+        <p style="
+            font-size: 20px; 
+            color: #ecf0f1; 
+            max-width: 550px; 
+            text-align: left; 
+            line-height: 1.6; 
+            margin-bottom: 40px;
+        ">
+            Veri setlerinizi yönetin, model performanslarını inceleyin ve gerçek zamanlı tahminler yapın. 
+            Güçlü altyapımızla kararlarınızı veriyle destekleyin.
+        </p>
+
+        <div style="text-align: left; margin-top: 30px;">
+            <a href="{% url 'iris_list' %}" class="btn-action" style="
+                padding: 16px 35px;
+                background: rgba(52, 152, 219, 0.2); /* Semi-transparent blue */
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                color: white;
+                text-decoration: none;
+                border-radius: 12px;
+                margin-right: 20px;
+                display: inline-block;
+                font-weight: bold;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+                transition: all 0.3s ease;
+            ">
+                📊 Verileri Yönet
+            </a>
+
+            <a href="{% url 'predict' %}" class="btn-action" style="
+                padding: 16px 35px;
+                background: rgba(46, 204, 113, 0.2); /* Semi-transparent green */
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                color: white;
+                text-decoration: none;
+                border-radius: 12px;
+                display: inline-block;
+                font-weight: bold;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+                transition: all 0.3s ease;
+            ">
+                🤖 ML Tahmini Yap
+            </a>
+        </div>
+
+        <style>
+            /* Hover effects for the buttons */
+            .btn-action:hover {
+                transform: translateY(-5px);
+                background: rgba(255, 255, 255, 0.25) !important;
+                border-color: rgba(255, 255, 255, 0.6);
+                box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
+            }
+        </style>
+    </div>
+
+</body>
+</html>
